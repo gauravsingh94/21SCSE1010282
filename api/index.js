@@ -132,6 +132,27 @@ app.get("/categories/:categoryname/products/:productid", async (req, res) => {
   }
 });
 
+
+app.get('/amz/laptops', async (req, res) => {
+  if (!token) {
+      return res.status(401).json({ error: 'Unauthorized. Please authenticate first.' });
+  }
+
+  try {
+      const response = await axios.get('http://20.244.56.144/test/companies/AMZ/categories/Laptop/products', {
+          headers: { Authorization: `Bearer ${token}` },
+          params: {
+              top: 10,
+              minPrice: 1,
+              maxPrice: 10000
+          }
+      });
+      res.json(response.data);
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
